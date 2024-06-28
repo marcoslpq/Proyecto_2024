@@ -1,0 +1,68 @@
+*{
+    padding: 0;
+    box-sizing : border-box;
+}
+
+
+body{
+    font-family: "Josefin Sans", sans-serif !important;
+    background: url(../img/fondo-sesion.jpg) no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+h1{
+    font-weight: 700 !important;
+    color: #fff !important;
+}
+
+h3{
+    font-family: "Josefin Sans", sans-serif !important;
+    font-size: 3vh !important;
+    font-weight: 700 !important;
+}
+
+
+header{
+    background-color: #fff;
+    position: relative;
+    bottom: 10px;
+}
+
+body label{
+    color: #fff !important;
+    font-family: "Josefin Sans", sans-serif;
+}
+
+
+.img{
+    width: 40px;
+    height: 40px;
+    position: relative;
+    bottom: 5px;
+}
+
+.inicio{
+    display: flex;
+}
+
+.conteiner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-right: 60px;
+    height: 80px;
+}
+
+.texto{
+    font-size: 2vh;
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.icono{
+    position: relative;
+    top: 10px;
+    padding: 0 20px;
+}

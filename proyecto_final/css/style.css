@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap');
+
+
+*{
+    padding: 0;
+    box-sizing : border-box;
+}
+
+body{
+    font-family: "Josefin Sans", sans-serif !important;
+    background: url(../img/fondo-sesion.jpg) no-repeat !important;
+    background-size: cover !important;
+    background-position: center;
+}
+
+body h1{
+    font-weight: 700 !important;
+    color: #fff;
+}
+
+body h2{
+    font-weight: 700 !important;
+    font-size: 3vh;
+}
+
+p{
+    font-family: "Josefin Sans", sans-serif !important; 
+}
+
+body label{
+    color: #fff;
+}
+
+
+header{
+    background-color: #fff;
+    position: relative;
+    bottom: 10px;
+}
+
+
+.conteiner{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-right: 60px;
+    height: 80px;
+}
+
+.conteiner .nav-link{
+    list-style: none;
+}
+
+.conteiner .nav-link li{
+    display: inline-block;
+    padding: 0 30px;
+}
+
+.conteiner .nav-link li:hover{
+    transform: scale(1.1);
+}
+
+
+.conteiner .nav-link a{
+    color: green;
+    font-size: 700;
+    text-decoration: none;
+}
+
+.nav-link{
+    position: relative;
+    top: 5px;
+}
+
+.texto{
+    font-size: 2vh;
+    padding-top: 10px;
+    margin-left: 10px;
+}
+
+.img{
+    width: 40px;
+    height: 40px;
+    position: relative;
+    bottom: 5px;
+}
+
+.inicio{
+    display: flex;
+}
+
+.container{
+    position: relative;
+    bottom: 5px;
+}
+
+.slide{
+    margin-top: 10px;
+}
+
+.slide img {
+    height: 65vh;
+    width: auto;
+}
+.portada{
+    display: flex;
+    align-items: center;
+    position: relative;
+    left: 300px;
+}
+
+.btn-round {
+    width: 30px;
+    height: 30px;
+    line-height: 20px;
+    padding: 0 !important;
+    text-align: center !important;
+}
+
+.palabra{
+    position: relative !important;
+    bottom: 20px !important;
+}
+
+.enlace{
+    text-decoration: none;
+    color: white;
+}
+
+/* form-de-reservas */
+.input{
+    position: relative;
+    bottom: 10px;
+}
+/* fin */
+
+.icono{
+    font-size: 40px;
+}
+
+.parrafo{
+    font-size: 4vh;
+}
+
+.posicion-conteiner{
+    position: relative;
+    right: 45px;
+}
+
+#formulario-1, #formulario-2, #formulario-3 {
+    display: none; /* Ocultar formularios por defecto */
+}
+
+
+#galeria img{
+    width: 100%;
+    height: 100%;
+}
+
+#galeria .col-lg-4 {
+    margin: 0 !important;
+    padding: 20px;
+}
+
+.anch-card{
+    width: 18rem;
+}
+
+.alt-card{
+    height: 50% !important;
+}
+
+#tamaño_copyright {
+    height: 20px;
+    width: 20px;
+}
+
+.tam-footer{
+    height: 60px !important;
+}
+
+#banner{
+    background-image: url(../img/main.png);
+    background-size: cover;
+    background-position: center;
+    height: 80vh;
+    position: relative;
+    bottom: 20px;
+}
+
+.mover-boton{
+    position: relative;
+    top: 420px;
+    left: 320px;
+}
+/* 
+club */
+
+.imagen{
+    height: 100%;
+}
+
+.imagen-1{
+    height: 570px !important;
+    width: 100%;
+}
