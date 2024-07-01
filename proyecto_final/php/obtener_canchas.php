@@ -8,10 +8,15 @@ if (isset($_GET['id_deporte'])) {
             GROUP BY cancha";
     $resultado = $conexion->query($sql);
     
-    $options = '';
-    while ($valores = mysqli_fetch_array($resultado)) {
-        $options .= '<option value="'.$valores['cancha'].'">'.$valores['cancha'].'</option>';
+    if ($resultado->num_rows > 0) {
+        $options = '';
+        while ($valores = mysqli_fetch_array($resultado)) {
+            $options .= '<option value="'.$valores['cancha'].'">'.$valores['cancha'].'</option>';
+        }
+        echo $options;
+    } else {
+        echo '<option value="">Este deporte no tiene canchas</option>';
     }
-    echo $options;
 }
 ?>
+

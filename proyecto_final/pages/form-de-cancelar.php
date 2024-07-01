@@ -49,6 +49,7 @@
                         <option value="Problemas de salud">Problemas de salud</option>
                         <option value="Condiciones climáticas">Condiciones climáticas</option>
                         <option value="Falta de jugadores">Falta de jugadores</option>
+                        <option value="Otros">Otros</option>
                     </select>
                 </div>
                 <div class="col-md-6">

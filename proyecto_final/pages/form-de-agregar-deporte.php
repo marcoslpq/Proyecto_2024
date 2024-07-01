@@ -77,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form class="row g-3 mt-3" name="formularioAgregar" method="POST" autocomplete="off" action="./form-de-agregar-deporte.php">
         <div class="col-md-12">
             <label for="agregar" class="form-label">Agregar tipo de deporte</label>
-            <input type="text" name="input" class="form-control" id="input" value="">
+            <input type="text" name="input" class="form-control" id="input" value="" required>
         </div>
         <div class="col-md-6">
             <button type="submit" class="btn btn-danger mt-3 col-md-12">Agregar</button>

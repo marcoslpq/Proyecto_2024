@@ -145,7 +145,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="correo" class="form-control" id="email" placeholder="Email" maxlength="20" required>
+                            <input type="email" name="correo" class="form-control" id="email" placeholder="Email" maxlength="50" required>
                         </div>
                         <div class="col-md-6 mt-3">
                             <label for="fecha-de-nacimiento" class="form-label">Fecha de nacimiento</label>

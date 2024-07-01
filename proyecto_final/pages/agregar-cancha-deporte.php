@@ -3,41 +3,32 @@ require("../php/conexion.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $id_deporte = $_POST['tipo-deporte'];
-    $dia = $_POST['dia'];
-    $cancha = $_POST['numero-de-cancha'];
     $hora_inicio = $_POST['hora_inicio'];
     $hora_finalizado = $_POST['hora_finalizado'];
 
-    // Obtener ID del día de la tabla días
-    $dias = array("Lunes" => 1, "Martes" => 2, "Miercoles" => 3, "Jueves" => 4, "Viernes" => 5, "Sabado" => 6, "Domingo" => 7);
-    $id_dia = $dias[$dia];
-
-    // Verificar si ya existe un registro con los mismos detalles
-    $sql = "SELECT * FROM deporte_cancha_hora 
-            WHERE id_deporte = ? 
-            AND id_dia = ? 
-            AND cancha = ? 
-            AND ((hora_inicio <= ? AND hora_finalizado > ?) 
-            OR (hora_inicio < ? AND hora_finalizado >= ?))";
+    // Obtener el número de cancha más alto del deporte seleccionado
+    $sql = "SELECT MAX(cancha) AS max_cancha FROM deporte_cancha_hora WHERE id_deporte = ?";
     $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("iiissss", $id_deporte, $id_dia, $cancha, $hora_inicio, $hora_inicio, $hora_finalizado, $hora_finalizado);
+    $stmt->bind_param("i", $id_deporte);
     $stmt->execute();
     $resultado = $stmt->get_result();
+    $row = $resultado->fetch_assoc();
+    $cancha = $row['max_cancha'] + 1;
 
-    if ($resultado->num_rows > 0) {
-        echo "<script>alert('Ya existe el registro que quieres asignar'); window.location.href = 'agregar-horario-cancha.php';</script>";
-    } else {
-        // Si no existe, insertar el nuevo registro
-        $sql = "INSERT INTO deporte_cancha_hora (id_deporte, id_dia, cancha, hora_inicio, hora_finalizado, activa_s_n) 
-                VALUES (?, ?, ?, ?, ?, 'SI')";
-        $stmt = $conexion->prepare($sql);
+    // Insertar el nuevo número de cancha para todos los días de la semana
+    $dias = range(1, 7);
+    $sql = "INSERT INTO deporte_cancha_hora (id_deporte, id_dia, cancha, hora_inicio, hora_finalizado, activa_s_n) VALUES (?, ?, ?, ?, ?, 'SI')";
+    $stmt = $conexion->prepare($sql);
+
+    foreach ($dias as $id_dia) {
         $stmt->bind_param("iiiss", $id_deporte, $id_dia, $cancha, $hora_inicio, $hora_finalizado);
-        if ($stmt->execute()) {
-            echo "<script>alert('Horario agregado exitosamente'); window.location.href = 'agregar-horario-cancha.php';</script>";
-        } else {
-            echo "<script>alert('Error al agregar el horario'); window.location.href = 'agregar-horario-cancha.php';</script>";
+        if (!$stmt->execute()) {
+            echo "<script>alert('Error al agregar el horario'); window.location.href = 'agregar-cancha-deporte.php';</script>";
+            exit;
         }
     }
+
+    echo "<script>alert('Nueva cancha agregada exitosamente'); window.location.href = 'tabla-deporte-cancha-hora.php';</script>";
 }
 ?>
 
@@ -72,9 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="row justify-content-center">
     <div class="col-md-5">
 
-    <form class="row g-3 mt-3" name="formularioAgregar" method="POST" autocomplete="off" action="./agregar-horario-cancha.php">
+    <form class="row g-3 mt-3" name="formularioAgregar" method="POST" autocomplete="off" action="./agregar-cancha-deporte.php">
+    <label for="tipo-deporte" class="form-label">Elige el deporte donde quieres agregar la cancha</label>
         <div class="col-md-12">
-                    <label for="tipo-deporte" class="form-label">Tipo de deporte</label>
                     <select name="tipo-deporte" id="tipo-deporte" class="form-select" aria-label="Default select example" required>
                         <option value="" selected disabled>Seleccione un deporte</option>
                         <?php
@@ -87,24 +78,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         ?>
                     </select>
         </div>
-        <div class="col-md-12">
-                    <label for="dia" class="form-label">Dia</label>
-                    <select name="dia" id="dia" class="form-select" aria-label="Default select example" required>
-                        <option value="Lunes" selected>Lunes</option>
-                        <option value="Martes">Martes</option>
-                        <option value="Miercoles">Miercoles</option>
-                        <option value="Jueves">Jueves</option>
-                        <option value="Viernes">Viernes</option>
-                        <option value="Sabado">Sabado</option>
-                        <option value="Domingo">Domingo</option>
-                    </select>
-        </div>
-        <div class="col-md-12">
-            <label for="numero-de-cancha" class="form-label">Nº de Cancha</label>
-            <select name="numero-de-cancha" id="numero-de-cancha" class="form-select" aria-label="Default select example" required>
-                <option value="" selected disabled></option>
-            </select>
-        </div>
+        <br>
+        <label for="tipo-deporte" class="form-label">Elige un horario para iniciar la cancha</label>
         <div class="col-md-6 mt-3">
             <label for="hora_inic" class="form-label">Horario Inicio</label>
             <select name="hora_inicio" class="form-select" id="hora_inic" required>
@@ -170,21 +145,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-        $(document).ready(function() {
-            $('#tipo-deporte').change(function() {
-                var deporteId = $(this).val();
-                $.ajax({
-                    url: '../php/obtener_canchas.php',
-                    method: 'GET',
-                    data: { id_deporte: deporteId },
-                    success: function(data) {
-                        $('#numero-de-cancha').html(data);
-                    }
-                });
-            });
-        });
-</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const horaInicio = document.getElementById('hora_inic');
@@ -210,3 +171,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </script>
 </body>
 </html>
+

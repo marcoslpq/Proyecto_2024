@@ -96,7 +96,9 @@
                 data: { id: id, estado: estado },
                 success: function(response) {
                     var data = JSON.parse(response);
-                    if (data.status !== 'success') {
+                    if (data.status === 'success') {
+                        alert("El estado del deporte ha sido cambiado con exito ");
+                    } else {
                         alert("Error: " + data.message);
                     }
                 },

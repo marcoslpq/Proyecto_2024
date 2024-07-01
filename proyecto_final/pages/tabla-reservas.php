@@ -113,11 +113,7 @@
                         <a href="../pages/usuario-admin.php" class="btn btn-warning">Volver</a>
                     </div>
                 <div>
-            </div>
-        </div>
-    </main>
-
-    <nav aria-label="Page navigation example">
+                <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <?php
             // Calcula el número total de páginas
@@ -141,6 +137,11 @@
             ?>
         </ul>
     </nav>
+                </div>
+                </div>
+    </main>
+
+    
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

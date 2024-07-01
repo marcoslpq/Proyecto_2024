@@ -28,15 +28,15 @@ try {
                         <div class='d-flex'>
                             <div class='mx-2'>
                                 <input type='radio' name='activo_{$row['id']}' id='activo_si_{$row['id']}' value='SI' ".($row['socio_activa_s_n'] == 'SI' ? 'checked' : '').">
-                                <label for='activo_si_{$row['id']}'>Activo</label>
+                                <label class='text-dark for='activo_si_{$row['id']}'>Activo</label>
                             </div>
                             <div class='mx-2'>
                                 <input type='radio' name='activo_{$row['id']}' id='activo_no_{$row['id']}' value='NO' ".($row['socio_activa_s_n'] == 'NO' ? 'checked' : '').">
-                                <label for='activo_no_{$row['id']}'>No activo</label>
+                                <label class='text-dark for='activo_no_{$row['id']}'>No activo</label>
                             </div>
                         </div>
                     </td>
-                    <td><a class='btn btn-danger' onclick='eliminarSocio({$row['id']})'>Eliminar</a>
+                    <td>
                         <a class='btn btn-info' href='../php/detalles_persona.php?id={$row['id']}'>Ver detalles</a>
                     </td>
                 </tr>";

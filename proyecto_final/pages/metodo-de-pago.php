@@ -29,7 +29,7 @@
                 </ul>
             </nav>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                <button type="button" class="btn btn-success">Administracion</button>
+                <a href="admin.php"><button type="button" class="btn btn-success">Administrador</button></a>
                 <select name="idioma" id="idioma">
                     <option value="español">Español</option>
                     <option value="ingles">Inglés</option>
@@ -103,7 +103,7 @@
                             </div>
                             <div class="col-md-12 mt-3">
                                 <input type="hidden" id="reserva_id" value="<?php echo $id_reserva; ?>">
-                                <button type="button" class="btn btn-success btn-separado" id="echoButton" name="Echo" >Echo</button>
+                                <button type="button" class="btn btn-success btn-separado" id="echoButton" name="Echo" >Hecho</button>
                                 <button type="button" class="btn btn-danger" id="Cancelar_pago1" name="Cancelar_pago1">Cancelar</button>
                             </div>
                             

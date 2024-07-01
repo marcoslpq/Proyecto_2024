@@ -32,15 +32,20 @@
             <!-- Campo de búsqueda -->
             <div class="mb-3">
                 <div class="row">
-                    <div class="col">
-                        <select id="search-deporte" class="form-select">
-                            <option value="">Seleccionar Deporte</option>
-                            <option value="futbol">Futbol</option>
-                            <option value="voley">Voley</option>
-                            <option value="basquet">Basquet</option>
-                            <option value="hockey">Hockey</option>
-                        </select>
-                    </div>
+                <div class="col">
+                    <select name="deportes" id="search-deporte" class="form-select" aria-label="Default select example">
+                        <option value="">Seleccione un deporte</option>
+                        <?php
+                            require("../php/conexion.php");
+                            $sql = "SELECT ID, Descripcion FROM deporte";
+                            $resultado = $conexion->query($sql);
+                            while ($valores = mysqli_fetch_array($resultado)) {
+                                echo '<option value="' . $valores['ID'] . '">' . $valores['Descripcion'] . '</option>';
+                            }
+                        ?>
+                    </select>
+                </div>
+
                     <div class="col">
                         <select id="search-dia" class="form-select">
                             <option value="">Seleccionar Día</option>
@@ -54,7 +59,7 @@
                         </select>
                     </div>
                     <div class="col">
-                        <select id="search-cancha" class="form-select">
+                        <select name="nrdecancha" class="form-select" id="numero_cancha_futbol" aria-label="Default select example">
                             <option value="">Seleccionar Cancha</option>
                         </select>
                     </div>
@@ -121,7 +126,7 @@
                                             </tr>";
                                     }
                                 } else {
-                                    echo "<tr><td colspan='10'>No hay reservas</td></tr>";
+                                    echo "<tr><td colspan='10'>No hay registros</td></tr>";
                                 }
                             } catch (mysqli_sql_exception $e) {
                                 echo "<tr><td colspan='10'>Error en la consulta SQL: " . $e->getMessage() . "</td></tr>";
@@ -141,8 +146,9 @@
             </form>
         <div class="container d-flex justify-content-between p-0"> 
             <div>
-                <a href="../pages/agregar-horario-cancha.php" class="btn btn-primary">Agregar</a>
-                <a href="../pages/usuario-admin.php" class="btn btn-warning">Volver</a>
+                <a href="../pages/agregar-horario-cancha.php" class="btn btn-primary">Agregar horario</a>
+                <a href="../pages/agregar-cancha-deporte.php" class="btn btn-primary">Agregar cancha</a>
+                
             </div>
         <div>
             <nav aria-label="Page navigation example">
@@ -164,6 +170,11 @@
             </nav>
         </div>
         </div>
+        
+        </div>
+        <br>
+        <div class="text-center"> <!-- Nuevo contenedor centrado -->
+            <a href="../pages/usuario-admin.php" class="btn btn-warning">Volver</a>
         </div>
     </div>
 </main>
@@ -178,9 +189,11 @@
             data: { id: id, estado: estado },
             success: function(response) {
                 var data = JSON.parse(response);
-                if (data.status !== 'success') {
-                    alert("Error: " + data.message);
-                }
+                if (data.status === 'success') {
+                        alert("El estado ha sido cambiado con exito ");
+                    } else {
+                        alert("Error: " + data.message);
+                    }
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert("Error al realizar la solicitud AJAX: " + textStatus + " - " + errorThrown);
@@ -188,45 +201,79 @@
         });
     }
 
+    /*Para buscar los nrs de canchas segun el deporte */
     $(document).ready(function() {
-        function updateCanchas() {
-            var deporte = $('#search-deporte').val();
-            var canchas = $('#search-cancha');
-            canchas.empty();
-            if (deporte === 'futbol') {
-                canchas.append('<option value="1">1</option>');
-                canchas.append('<option value="2">2</option>');
-                canchas.append('<option value="3">3</option>');
-            } else {
-                canchas.append('<option value="1">1</option>');
-            }
-        }
+        $('#search-deporte').on('change', function() {
+            var idDeporte = $(this).val();
+            $.ajax({
+                url: '../php/deporte_obtener_canchas.php',
+                type: 'GET',
+                data: { id_deporte: idDeporte },
+                success: function(data) {
+                    var canchas = $('#numero_cancha_futbol');
+                    canchas.empty();
+                    canchas.append('<option value="">Seleccionar Cancha</option>');
+                    var canchasData = JSON.parse(data);
+                    canchasData.forEach(function(cancha) {
+                        canchas.append('<option value="' + cancha.cancha + '">' + cancha.cancha + '</option>');
+                    });
+                }
+            });
+        });
+    });
 
-        function fetchFilteredResults() {
-            var deporte = $('#search-deporte').val();
+    //Para realizar busqueda
+
+    $(document).ready(function() {
+        // Función para realizar la búsqueda
+        function realizarBusqueda() {
+            var idDeporte = $('#search-deporte').val();
             var dia = $('#search-dia').val();
-            var cancha = $('#search-cancha').val();
+            var cancha = $('#numero_cancha_futbol').val();
 
             $.ajax({
                 url: '../php/buscar_deporte_cancha_hora.php',
                 type: 'GET',
-                data: { deporte: deporte, dia: dia, cancha: cancha },
+                data: {
+                    id_deporte: idDeporte,
+                    dia: dia,
+                    cancha: cancha
+                },
                 success: function(data) {
                     $('#deporte-cancha-hora-table-body').html(data);
                 }
             });
         }
 
-        $('#search-deporte').on('change', function() {
-            updateCanchas();
-            fetchFilteredResults();
-        });
-        $('#search-dia').on('change', fetchFilteredResults);
-        $('#search-cancha').on('change', fetchFilteredResults);
-        $('#filter-btn').on('click', fetchFilteredResults);
+        // Eventos change en los select
+        $('#search-deporte').on('change', realizarBusqueda);
+        $('#search-dia').on('change', realizarBusqueda);
+        $('#numero_cancha_futbol').on('change', realizarBusqueda);
 
-        updateCanchas();  // Inicializar las opciones de cancha al cargar la página
+        // Obtener las canchas según el deporte seleccionado
+        $('#search-deporte').on('change', function() {
+            var idDeporte = $(this).val();
+            $.ajax({
+                url: '../php/deporte_obtener_canchas.php',
+                type: 'GET',
+                data: { id_deporte: idDeporte },
+                success: function(data) {
+                    var canchas = $('#numero_cancha_futbol');
+                    canchas.empty();
+                    canchas.append('<option value="">Seleccionar Cancha</option>');
+                    var canchasData = JSON.parse(data);
+                    canchasData.forEach(function(cancha) {
+                        canchas.append('<option value="' + cancha.cancha + '">' + cancha.cancha + '</option>');
+                    });
+
+                    // Realizar la búsqueda nuevamente después de actualizar las canchas
+                    realizarBusqueda();
+                }
+            });
+        });
     });
+
+
 </script>
 </body>
 </html>
